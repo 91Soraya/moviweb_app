@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Favorite movies</title>
+</head>
+<body>
+<h1>Favorite movies of {{ user_name }}</h1>
+<ul>
+    {% for movie, details in user_movies.items() %}
+    <li>
+        <h2>{{ movie }}</h2>
+        <p>Year: {{ user_movies[movie]["year"] }}</p>
+        <p>Director: {{ user_movies[movie]["director"] }}</p>
+        <p>Rating: {{ user_movies[movie]["rating"] }}</p>
+        <a href="/users/{{ user_id }}/update_movie/{{ user_movies[movie]['id'] }}"<button>Update movie</button></a>
+        <a href="/users/{{ user_id }}/delete_movie/{{ user_movies[movie]['id'] }}"<button>Delete movie</button></a>
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

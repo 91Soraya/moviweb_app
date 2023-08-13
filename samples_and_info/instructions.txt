@@ -1,0 +1,164 @@
+Current layout: 1 Panel without tree
+
+Setting Up Your Development Environment
+In this section, we’ll guide you through setting up your development environment for the MoviWeb project. If you’re already familiar with the setup process, feel free to move ahead. But if you need a refresher, just follow these steps:
+1️⃣ Creating a New Project
+Open your PyCharm and start a new project. As you have done before, name it appropriately; moviweb_app is a good suggestion. Make sure you set up a new virtual environment for the project.
+2️⃣ Installing Flask
+You’ve installed Flask before, and we’ll need it again for this project. Remember, you should always keep your project’s dependencies isolated in a virtual environment. As always, install Flask using the following command in PyCharm’s terminal:
+pip3 install flask
+3️⃣ Setting up Your GitHub Repository
+Go to GitHub and create a new repository for this project. Name it moviweb_app or anything relevant you prefer. Once you’ve created your repository, clone it into your PyCharm project directory. Here’s how:
+Copy the URL of the GitHub repo.
+Open your PyCharm terminal.
+Navigate to your project directory (moviweb_app).
+Run the command: git clone <your-repo-url>
+With this setup, you can now push and pull changes to and from your GitHub repo directly from PyCharm. Remember to commit your changes regularly!
+4️⃣ Ready for Action!
+With your environment ready and Flask installed, you are all set to start developing the MoviWeb App! Remember, in the end, you should upload your work to Codio, the learning platform you’re using.
+In the next section, we’ll start with planning the data structure, defining your JSON schema, and creating the Python class for data management. Let’s jump right into it! 🚀
+---
+Planning Your Data Structure and JSON Schema
+
+Before you dive into building the application, let’s take some time to design the data structure that will support our app. Defining a clear JSON schema upfront can save a lot of time and confusion later.
+User and Movie Information
+
+The MoviWeb app will keep track of different users and their favorite movies. Each user can have multiple movies, and each movie will have its own set of details.
+At the very least, each User in our app should have:
+A unique identifier (id)
+A name (name)
+
+Each Movie should have:
+A unique identifier (id)
+The movie’s name (name)
+The movie’s director (director)
+The year of release (year)
+The rating of the movie (rating)
+
+JSON Schema
+Based on these requirements, we can sketch a basic JSON schema. In this case, we can create a list of users, where each user is a dictionary with 'id’, 'name’, and a list of 'movies’. Each movie will be a dictionary of its own, storing the name, director, year, and rating.
+Here’s an example of how our JSON might look:
+[
+  {
+    "id": 1,
+    "name": "Alice",
+    "movies": [
+      {
+        "id": 1,
+        "name": "Inception",
+        "director": "Christopher Nolan",
+        "year": 2010,
+        "rating": 8.8
+      },
+      {
+        "id": 2,
+        "name": "The Dark Knight",
+        "director": "Christopher Nolan",
+        "year": 2008,
+        "rating": 9.0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Bob",
+    "movies": []
+  }
+]
+
+Choose The Data structure
+As you progress in your understanding of data structures and efficiency, it’s crucial to critically evaluate the way you’re storing and accessing your data. 🤔
+Consider our current JSON structure, where users and movies are stored in lists. Let’s say you have the following code to find a user by ID:
+def find_user_by_id(users, id):
+  for user in users:
+    if user['id'] == id:
+      return user
+  return None
+
+This approach could potentially take a long time if there are a lot of users. Similarly, if a user has watched many movies, you would need to iterate through each of them to find a specific one. 😱
+Can you think of a more efficient way to organize this data to make these operations faster? 🚀 For example, what if instead of lists, we use a different data structure? What might be the advantages or disadvantages of using, say, a dictionary where user IDs or movie IDs are the keys?
+users = {
+  1: {
+    "name": "Alice",
+    "movies": {...}
+  },
+  2: {
+    "name": "Bob",
+    "movies": {...}
+  }
+}
+
+def find_user_by_id(users, id):
+  return users.get(id, None)
+
+And how would this change impact how we create, read, update, and delete data in our JSON structure? 💡
+By questioning and experimenting with these data structures, you’ll be better able to design efficient systems that can handle large amounts of data without compromising on performance. Remember, the best solution often depends on the specific requirements and constraints of your application, so it’s important to consider all factors.
+Class for Data Management
+
+
+
+With the JSON structure defined, we need a Python class that will interface with this JSON file. Let’s call it DataManager. This class will be responsible for reading the JSON file, parsing the JSON into Python data structures (lists and dictionaries), and providing methods to manipulate the data (like adding, updating, or removing movies).
+This is just a high-level view. In the next section, we’ll start implementing these ideas and gradually bring our MoviWeb App to life. Remember to take small steps and test your code as you go. You’ve got this! 💪🚀
+
+Implementing the DataManager Class with Interface
+Your new task will be to create a data manager to handle the application’s data. The key idea is to make this component flexible, so in the future, it can manage data not just from a JSON file but also from other sources such as a CSV file or a database.
+To achieve this, we will use a principle called polymorphism, which is a Greek word that means "many shapes". In the context of object-oriented programming, polymorphism is the provision of a single interface to represent different types.
+In other words, we’ll define an interface (a sort of contract) that each DataManager will implement, regardless of the data source it works with. This will make our code more modular and easy to maintain or expand in the future.
+Sounds good? Let’s get started!
+Creating the DataManager Interface
+First, we’ll define an interface for our DataManager using Python’s abc (Abstract Base Classes) module. Our DataManager interface will specify a few methods that every DataManager needs to implement.
+from abc import ABC, abstractmethod
+
+class DataManagerInterface(ABC):
+
+    @abstractmethod
+    def get_all_users(self):
+        pass
+
+    @abstractmethod
+    def get_user_movies(self, user_id):
+        pass
+As you work through this project, you might find you need more methods. When this happens, think about whether each new method is specific to one kind of DataManager (e.g., JSON, CSV, etc.) or whether it should be added to the interface.
+Here are a few things to consider:
+If the method involves a task that all DataManagers must perform, then it should be added to the interface.
+If the method’s task is specific to a certain type of DataManager (like reading or writing to a JSON file), then it should not be added to the interface.
+Remember, the purpose of an interface is to specify a set of common methods that different classes will implement in their own way. So keep your interface lean and generic, and put specific operations in the individual DataManager classes.
+Implementing the JSONDataManager
+Next, let’s implement a JSONDataManager that follows our DataManagerInterface. Here’s the skeleton of how this class could look:
+import json
+from .data_manager_interface import DataManagerInterface
+
+class JSONDataManager(DataManagerInterface):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def get_all_users(self):
+        # Return all the users all users
+        pass
+
+    def get_user_movies(self, user_id):
+        # Return all the movies for a given user
+        pass
+
+By implementing our DataManager this way, we make it possible to easily swap out our data source in the future. Want to switch from JSON to CSV or a database? Just implement a new DataManager that follows the same interface.
+Implementing CSVDataManager
+You don’t have to actually implement the CSVDataManager. This is just an hypothetical exercise for you. If you wish to implement it, go for it!
+Now, to illustrate the power of interfaces and polymorphism, let’s imagine we want to switch our data source to a CSV file. All we need to do is implement a new CSVDataManager class that respects the same DataManagerInterface:
+import csv
+from .data_manager_interface import DataManagerInterface
+
+class CSVDataManager(DataManagerInterface):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def get_all_users(self):
+        # Return all the users all users
+        pass
+
+    def get_user_movies(self, user_id):
+        # Return all the movies for a given user
+        pass
+With this structure, you can add as many data managers as you want (like a DatabaseDataManager, for example), and your application will remain consistent and easy to maintain. How cool is that?
+In the next section, we will dive into implementing the methods of our JSONDataManager. It’s about to get even more exciting! 🚀
+
+

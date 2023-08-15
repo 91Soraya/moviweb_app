@@ -48,12 +48,29 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
         with open(self.filename, "r") as handle:
             data = json.load(handle)
             users = data
-
         users.update(new_user)
         json_str = json.dumps(users)
         with open(self.filename, "w") as handle:
             handle.write(json_str)
-
         handle.close()
-
         return "User has been added"
+
+    def add_movie(self, user_id, new_movie):
+        """Takes 2 arguments, user_id for the user who wants to add the movie, and the details for the new movie,
+        with the following format:
+        { movie_title : {
+            "director": director name,
+            "year": year of the movie,
+            "rating": rating of the movie,
+            "id": unique identifier for the movie
+        }}
+        """
+        with open(self.filename, "r") as handle:
+            data = json.load(handle)
+            users = data
+            users[user_id]["movies"].update(new_movie)
+        json_str = json.dumps(users)
+        with open(self.filename, "w") as handle:
+            handle.write(json_str)
+        handle.close()
+        return "Movie has been added"

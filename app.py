@@ -24,6 +24,17 @@ def create_new_user(name, user_id):
     return new_user
 
 
+def create_new_movie_id():
+    all_movie_ids = []
+    all_users = data_manager.get_all_users()
+    for user in all_users:
+        user_movies = data_manager.get_user_movies(user)
+        for movie in user_movies:
+            all_movie_ids.append(user_movies[movie]["id"])
+    highest_id = max(all_movie_ids)
+    return highest_id + 1
+
+
 @app.route('/')  # Home page
 def home():
     return "Welcome to MovieWeb App!"
@@ -37,6 +48,7 @@ def list_users():
 
 @app.route("/users/<user_id>")  # exhibit a specific user’s list of favorite movies.
 def list_favorite_movies(user_id):
+    print(user_id, "User ID on route users/user_id")
     users = data_manager.get_all_users()
     user_name = data_manager.find_user_by_id(users, int(user_id))
     user_movies = data_manager.get_user_movies(user_id)
@@ -52,6 +64,9 @@ def list_favorite_movies(user_id):
 def add_new_user():
     if request.method == "POST":
         name = request.form.get("name")
+        if len(name) < 2:
+            error_message = "Please enter name of minimum 2 characters."
+            return render_template("error.html", error_message=error_message)
         existing_users = data_manager.get_all_users()
         for user in existing_users:
             if name.lower() == existing_users[user].lower():
@@ -64,9 +79,23 @@ def add_new_user():
     return render_template("add_user.html")
 
 
-@app.route("/users/<user_id>/add_movie")  # Display a form to add a new movie to a user´s list of favorite movies
-def add_movie():
-    pass
+@app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])  # Display a form to add a new movie to a user´s list of favorite movies
+def add_movie(user_id):
+    if request.method == "POST":
+        movie_title = request.form.get("movie_title")
+        director = request.form.get("director")
+        year = int(request.form.get("year"))
+        rating = float(request.form.get("rating"))
+        movie_id = create_new_movie_id()
+        new_movie = { movie_title : {
+            "director": director,
+            "year": year,
+            "rating" : rating,
+            "id" : movie_id
+        }}
+        data_manager.add_movie(user_id, new_movie)
+        return redirect(url_for("list_users"))
+    return render_template("add_movie.html", user_id=user_id)
 
 
 @app.route("/users/<user_id>/update_movie/movie_id")  # display a form allowing for the updating of details of a specific movie in a user’s list.

@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+from jinja2 import UndefinedError
+
 from datamanager.JSONDataManager import JSONDataManager
 
 app = Flask(__name__)
@@ -18,7 +20,11 @@ def list_favorite_movies(user_id):
     users = data_manager.get_all_users()
     user_name = data_manager.find_user_by_id(users, int(user_id))
     user_movies = data_manager.get_user_movies(user_id)
-    return render_template('user_movies.html', users=users, user_name=user_name, user_movies=user_movies, user_id=user_id)
+    try:
+        return render_template('user_movies.html', users=users, user_name=user_name, user_movies=user_movies, user_id=user_id)
+    except UndefinedError:
+        error_message = "User ID could not be found."
+        return render_template("not_found.html", error_message=error_message)
 
 @app.route("/add_user") # Present a form that enables the addition of a new user to our moviweb app
 def add_new_user():

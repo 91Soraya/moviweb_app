@@ -40,9 +40,20 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
                 continue
         return "User ID not found"
 
+    def add_new_user(self, new_user):
+        """Takes 2 arguments all_users representing all users in the storage file, and new_user with the
+        new user ID, user name and an empty dictionary of movies.
+        Adds the new user to all_users and saves it in the JSON file."""
+        users = {}
+        with open(self.filename, "r") as handle:
+            data = json.load(handle)
+            users = data
 
-# json_object = JSONDataManager("users.json")
-# print(json_object.get_all_users())
-# print(json_object.get_user_movies(2))
-# users = json_object.get_all_users()
-# print(json_object.find_user_by_id(users, 2))
+        users.update(new_user)
+        json_str = json.dumps(users)
+        with open(self.filename, "w") as handle:
+            handle.write(json_str)
+
+        handle.close()
+
+        return "User has been added"

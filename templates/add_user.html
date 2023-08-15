@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" action="/add_user">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" onkeydown="return /[a-zA-Z0-9]/i.test(event.key)"><br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

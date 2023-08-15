@@ -21,3 +21,10 @@ class DataManagerInterface(ABC):
         """Takes 2 arguments all_users representing all users in the storage file, and user_id.
         returns the username from the user_id"""
         pass
+
+    @abstractmethod
+    def add_new_user(self, new_user):
+        """Takes 2 arguments all_users representing all users in the storage file, and new_user with the
+        new user ID, user name and an empty dictionary of movies.
+        Adds the new user to all_users and saves it in the JSON file."""
+        pass

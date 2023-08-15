@@ -29,6 +29,7 @@ class DataManagerInterface(ABC):
         Adds the new user to all_users and saves it in the JSON file."""
         pass
 
+    @abstractmethod
     def add_movie(self, user_id, new_movie):
         """Takes 2 arguments, user_id for the user who wants to add the movie, and the details for the new movie,
         with the following format:

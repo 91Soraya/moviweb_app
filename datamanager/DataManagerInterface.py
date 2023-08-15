@@ -28,3 +28,15 @@ class DataManagerInterface(ABC):
         new user ID, user name and an empty dictionary of movies.
         Adds the new user to all_users and saves it in the JSON file."""
         pass
+
+    def add_movie(self, user_id, new_movie):
+        """Takes 2 arguments, user_id for the user who wants to add the movie, and the details for the new movie,
+        with the following format:
+        { movie_title : {
+            "director": director name,
+            "year": year of the movie,
+            "rating": rating of the movie,
+            "id": unique identifier for the movie
+        }}
+        """
+        pass

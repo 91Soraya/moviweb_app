@@ -5,12 +5,11 @@
     <title>Update movie</title>
 </head>
 <body>
-<h1>Update movie</h1>
-<ul>
-    <li>Movie title = {{ movie_title }}</li>
-    <li>Director = {{ director }}</li>
-    <li>Year = {{ year }}</li>
-    <li>Rating = {{ rating }}</li>
-</ul>
+<h1>Update rating for movie {{ movie_title }}</h1>
+<form method="POST" action="{{ url_for('update_movie', user_movies=user_movies, movie_id=movie_id, movie_title=movie_title,
+                           rating=rating, user_id=user_id) }}">
+    <input type="number" id="rating" name="rating" step="0.1" value="{{ rating }}"><br>
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

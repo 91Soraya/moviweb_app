@@ -75,13 +75,18 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
         handle.close()
         return "Movie has been added"
 
-    def get_movie_details(self, user_movies, movie_id):
-        """Get all movie details for a specific movie"""
-        for movie in user_movies:
-            print(movie)
-        return movie
+    def update_movie(self, user_id, movie_title, updated_rating):
+        with open(self.filename, "r") as handle:
+            data = json.load(handle)
+            users = data
+            for movie in users[user_id]["movies"]:
+                if movie_title == movie:
+                    users[user_id]["movies"][movie]["rating"] = updated_rating
+        json_str = json.dumps(users)
+        with open(self.filename, "w") as handle:
+            handle.write(json_str)
+        handle.close()
+        return "Rating has been updated"
 
-    def update_movie(self, user_id, movie_id):
-        pass
 
 

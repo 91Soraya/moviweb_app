@@ -30,7 +30,7 @@ def create_new_movie_id():
     for user in all_users:
         user_movies = data_manager.get_user_movies(user)
         for movie in user_movies:
-            all_movie_ids.append(user_movies[movie]["id"])
+            all_movie_ids.append(user_movies[movie]["movie_id"])
     highest_id = max(all_movie_ids)
     return highest_id + 1
 
@@ -48,7 +48,6 @@ def list_users():
 
 @app.route("/users/<user_id>")  # exhibit a specific user’s list of favorite movies.
 def list_favorite_movies(user_id):
-    print(user_id, "User ID on route users/user_id")
     users = data_manager.get_all_users()
     user_name = data_manager.find_user_by_id(users, int(user_id))
     user_movies = data_manager.get_user_movies(user_id)
@@ -91,17 +90,26 @@ def add_movie(user_id):
             "director": director,
             "year": year,
             "rating": rating,
-            "id": movie_id
+            "movie_id": movie_id
         }}
         data_manager.add_movie(user_id, new_movie)
         return redirect(url_for("list_users"))
     return render_template("add_movie.html", user_id=user_id)
 
 
-@app.route("/users/<user_id>/update_movie/movie_id")
+@app.route("/users/<user_id>/update_movie/<movie_id>")
 # display a form allowing for the updating of details of a specific movie in a user’s list.
-def update_movie():
-    pass
+def update_movie(user_id, movie_id):
+    user_movies = data_manager.get_user_movies(user_id)
+    for movie in user_movies:
+        if int(movie_id) == int(user_movies[movie]["movie_id"]):
+            movie_title = movie
+            year = user_movies[movie]["year"]
+            director = user_movies[movie]["director"]
+            rating = user_movies[movie]["rating"]
+
+    return render_template("update_movie.html", user_movies=user_movies, movie_id=movie_id, movie_title=movie_title,
+                           year=year, director=director, rating=rating)
 
 
 @app.route("/users/<user_id>/delete_movie/<movie_id>")

@@ -74,3 +74,14 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
             handle.write(json_str)
         handle.close()
         return "Movie has been added"
+
+    def get_movie_details(self, user_movies, movie_id):
+        """Get all movie details for a specific movie"""
+        for movie in user_movies:
+            print(movie)
+        return movie
+
+    def update_movie(self, user_id, movie_id):
+        pass
+
+

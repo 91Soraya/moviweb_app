@@ -41,3 +41,14 @@ class DataManagerInterface(ABC):
         }}
         """
         pass
+
+    @abstractmethod
+    def get_movie_details(self, user_id, movie_id):
+        """Get all movie details for a specific movie"""
+        pass
+
+    @abstractmethod
+    def update_movie(self, user_id, movie_id):
+        """Takes 2 arguments, user_id and movie_id, displays the movie details and allows the user to update the
+        movie details """
+        pass

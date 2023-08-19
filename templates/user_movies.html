@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Favorite movies of {{ user_name }}</h1>
+<a href="/users/{{ user_id }}/add_movie">Add new movie</a>
 <ul>
     {% for movie, details in user_movies.items() %}
     <li>

@@ -5,7 +5,7 @@
     <title>Add movie</title>
 </head>
 <body>
-<h1>Update movie for user ID {{ user_id }}</h1>
+<h1>Add a new movie</h1>
 <form method="POST" action="{{ url_for('add_movie', user_id=user_id) }}">
     <label for="movie_title">Movie title: </label><br>
     <input type="text" id="movie_title" name="movie_title"><br>
@@ -19,10 +19,3 @@
 </form>
 </body>
 </html>
-
-* movie_title
-* director
-* rating
-* year
-
-* movie_id to be generated

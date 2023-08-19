@@ -7,7 +7,7 @@ app = Flask(__name__)
 data_manager = JSONDataManager('datamanager/users.json')  # Use the appropriate path to your JSON file
 
 
-def create_new_id():
+def create_new_user_id():
     user_ids = []
     users = data_manager.get_all_users()
     for user_id in users:
@@ -37,7 +37,7 @@ def create_new_movie_id():
 
 @app.route('/')  # Home page
 def home():
-    return "Welcome to MovieWeb App!"
+    return render_template("index.html")
 
 
 @app.route('/users')  # present a list of all users registered in our MovieWeb App.
@@ -72,14 +72,14 @@ def add_new_user():
             if name.lower() == existing_users[user].lower():
                 error_message = "User already exists."
                 return render_template("error.html", error_message=error_message)
-        user_id = create_new_id()
+        user_id = create_new_user_id()
         new_user = create_new_user(name, user_id)
         data_manager.add_new_user(new_user)
         return redirect(url_for("list_users"))
     return render_template("add_user.html")
 
 
-@app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])  # Display a form to add a new movie to a user´s list of favorite movies
+@app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])  # Display a form to add a new movie to a user´s list
 def add_movie(user_id):
     if request.method == "POST":
         movie_title = request.form.get("movie_title")
@@ -87,23 +87,25 @@ def add_movie(user_id):
         year = int(request.form.get("year"))
         rating = float(request.form.get("rating"))
         movie_id = create_new_movie_id()
-        new_movie = { movie_title : {
+        new_movie = {movie_title: {
             "director": director,
             "year": year,
-            "rating" : rating,
-            "id" : movie_id
+            "rating": rating,
+            "id": movie_id
         }}
         data_manager.add_movie(user_id, new_movie)
         return redirect(url_for("list_users"))
     return render_template("add_movie.html", user_id=user_id)
 
 
-@app.route("/users/<user_id>/update_movie/movie_id")  # display a form allowing for the updating of details of a specific movie in a user’s list.
+@app.route("/users/<user_id>/update_movie/movie_id")
+# display a form allowing for the updating of details of a specific movie in a user’s list.
 def update_movie():
     pass
 
 
-@app.route("/users/<user_id>/delete_movie/<movie_id>")  # Upon visiting this route, a specific movie will be removed from a user’s favorite movie list.
+@app.route("/users/<user_id>/delete_movie/<movie_id>")
+# Upon visiting this route, a specific movie will be removed from a user’s favorite movie list.
 def delete_movie():
     pass
 

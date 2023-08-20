@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import UndefinedError
+import requests
+import json
 
 from datamanager.JSONDataManager import JSONDataManager
 
@@ -82,18 +84,56 @@ def add_new_user():
 def add_movie(user_id):
     if request.method == "POST":
         movie_title = request.form.get("movie_title")
-        director = request.form.get("director")
-        year = int(request.form.get("year"))
-        rating = float(request.form.get("rating"))
-        movie_id = create_new_movie_id()
-        new_movie = {movie_title: {
-            "director": director,
-            "year": year,
-            "rating": rating,
-            "movie_id": movie_id
-        }}
-        data_manager.add_movie(user_id, new_movie)
-        return redirect(url_for("list_users"))
+        try:
+            response_API = requests.get("http://www.omdbapi.com/?apikey=4220af53&t=" + movie_title)
+        except requests.exceptions.HTTPError:
+            error_message = "Http Error"
+            print(error_message)
+            return render_template("error.html", error_message=error_message)
+        except requests.exceptions.ConnectionError:
+            error_message = "Connection Error"
+            print(error_message)
+            return render_template("error.html", error_message=error_message)
+        except requests.exceptions.Timeout:
+            error_message = "Timeout Error"
+            print(error_message)
+            return render_template("error.html", error_message=error_message)
+        except requests.exceptions.RequestException:
+            error_message = "Oops, something went wrong"
+            print(error_message)
+            return render_template("error.html", error_message=error_message)
+
+        api_data = response_API.text
+        parse_json = json.loads(api_data)
+        if parse_json["Response"] == "False":
+            error_message = "Parsing error"
+            return render_template("error.html", error_message=error_message)
+        else:
+            director = parse_json["Director"]
+            year = int(parse_json["Year"])
+            rating = float(parse_json["imdbRating"])
+            movie_id = create_new_movie_id()
+            new_movie = {movie_title: {
+                "director": director,
+                "year": year,
+                "rating": rating,
+                "movie_id": movie_id
+            }}
+            data_manager.add_movie(user_id, new_movie)
+            return redirect(url_for("list_users"))
+
+        # director = request.form.get("director")
+        # year = int(request.form.get("year"))
+        # rating = float(request.form.get("rating"))
+        # movie_id = create_new_movie_id()
+        # new_movie = {movie_title: {
+        #     "director": director,
+        #     "year": year,
+        #     "rating": rating,
+        #     "movie_id": movie_id
+        # }}
+        # data_manager.add_movie(user_id, new_movie)
+        # return redirect(url_for("list_users"))
     return render_template("add_movie.html", user_id=user_id)
 
 

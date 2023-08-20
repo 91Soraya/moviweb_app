@@ -9,12 +9,6 @@
 <form method="POST" action="{{ url_for('add_movie', user_id=user_id) }}">
     <label for="movie_title">Movie title: </label><br>
     <input type="text" id="movie_title" name="movie_title"><br>
-    <label for="director">Director: </label><br>
-    <input type="text" id="director" name="director"><br>
-    <label for="year">Year: </label><br>
-    <input type="number" id="year" name="year"><br>
-    <label for="rating">Rating: </label><br>
-    <input type="number" id="rating" name="rating" step="0.1"><br>
     <input type="submit" value="Submit">
 </form>
 </body>

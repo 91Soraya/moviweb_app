@@ -45,5 +45,10 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def update_movie(self, user_id, movie_title, updated_rating):
-        """Takes 2 argument, updated_movie in a dictionary format, and updates the movie for the user with user_id"""
+        """Takes 2 arguments, updated_movie in a dictionary format, and updates the movie for the user with user_id"""
+        pass
+
+    @abstractmethod
+    def delete_movie(self, user_id, movie_title):
+        """Takes 2 arguments, user_id and movie_title and deletes the movie"""
         pass

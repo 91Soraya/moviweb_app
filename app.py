@@ -113,10 +113,17 @@ def update_movie(user_id, movie_id):
                            rating=rating, user_id=user_id)
 
 
-@app.route("/users/<user_id>/delete_movie/<movie_id>")
+@app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["GET", "POST"])
 # Upon visiting this route, a specific movie will be removed from a user’s favorite movie list.
-def delete_movie():
-    pass
+def delete_movie(user_id, movie_id):
+    user_movies = data_manager.get_user_movies(user_id)
+    for movie in user_movies:
+        if int(movie_id) == int(user_movies[movie]["movie_id"]):
+            movie_title = movie
+            data_manager.delete_movie(user_id, movie_title)
+
+
+    return redirect(url_for("list_favorite_movies", user_id=user_id))
 
 
 if __name__ == '__main__':

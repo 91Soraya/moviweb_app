@@ -89,4 +89,15 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
         return "Rating has been updated"
 
 
+    def delete_movie(self, user_id, movie_title):
+        with open(self.filename, "r") as handle:
+            data = json.load(handle)
+            users = data
+            del users[user_id]["movies"][movie_title]
+            json_str = json.dumps(users)
+
+        with open(self.filename, "w") as handle:
+            handle.write(json_str)
+        handle.close()
+        return "Movie has been deleted"
 

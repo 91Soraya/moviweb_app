@@ -122,18 +122,6 @@ def add_movie(user_id):
             data_manager.add_movie(user_id, new_movie)
             return redirect(url_for("list_users"))
 
-        # director = request.form.get("director")
-        # year = int(request.form.get("year"))
-        # rating = float(request.form.get("rating"))
-        # movie_id = create_new_movie_id()
-        # new_movie = {movie_title: {
-        #     "director": director,
-        #     "year": year,
-        #     "rating": rating,
-        #     "movie_id": movie_id
-        # }}
-        # data_manager.add_movie(user_id, new_movie)
-        # return redirect(url_for("list_users"))
     return render_template("add_movie.html", user_id=user_id)
 
 
@@ -164,6 +152,11 @@ def delete_movie(user_id, movie_id):
 
 
     return redirect(url_for("list_favorite_movies", user_id=user_id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':

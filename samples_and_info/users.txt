@@ -1,0 +1,13 @@
+users = {
+  1: {
+    "name": "Alice",
+    "movies": {...}
+  },
+  2: {
+    "name": "Bob",
+    "movies": {...}
+  }
+}
+
+def find_user_by_id(users, id):
+  return users.get(id, None)

@@ -3,7 +3,7 @@ from jinja2 import UndefinedError
 import requests
 import json
 
-from datamanager.JSONDataManager import JSONDataManager, find_user_by_id
+from datamanager.JSONDataManager import JSONDataManager
 
 app = Flask(__name__)
 data_manager = JSONDataManager('datamanager/users.json')  # Use the appropriate path to your JSON file
@@ -51,7 +51,7 @@ def list_users():
 @app.route("/users/<user_id>")  # exhibit a specific user’s list of favorite movies.
 def list_favorite_movies(user_id):
     users = data_manager.get_all_users()
-    user_name = find_user_by_id(users, int(user_id))
+    user_name = data_manager.find_user_by_id(users, int(user_id))
     user_movies = data_manager.get_user_movies(user_id)
     try:
         return render_template('user_movies.html', users=users, user_name=user_name, user_movies=user_movies,
@@ -149,6 +149,7 @@ def delete_movie(user_id, movie_id):
         if int(movie_id) == int(user_movies[movie]["movie_id"]):
             movie_title = movie
             data_manager.delete_movie(user_id, movie_title)
+
     return redirect(url_for("list_favorite_movies", user_id=user_id))
 
 

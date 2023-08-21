@@ -42,6 +42,7 @@ class DataManagerInterface(ABC):
         """
         pass
 
+
     @abstractmethod
     def update_movie(self, user_id, movie_title, updated_rating):
         """Takes 2 arguments, updated_movie in a dictionary format, and updates the movie for the user with user_id"""

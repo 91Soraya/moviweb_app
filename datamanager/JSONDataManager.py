@@ -1,6 +1,16 @@
 import json
-# from . import DataManagerInterface
 from datamanager import DataManagerInterface
+
+
+def find_user_by_id(all_users, user_id):
+    """Takes 2 arguments all_users representing all users in the storage file, and user_id.
+    returns the username from the user_id"""
+    for user in all_users:
+        if user == user_id:
+            return all_users[user]
+        else:
+            continue
+    return "User ID not found"
 
 
 class JSONDataManager(DataManagerInterface.DataManagerInterface):
@@ -30,21 +40,10 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
             except KeyError:
                 return "User ID not found"
 
-    def find_user_by_id(self, all_users, user_id):
-        """Takes 2 arguments all_users representing all users in the storage file, and user_id.
-        returns the username from the user_id"""
-        for user in all_users:
-            if user == user_id:
-                return all_users[user]
-            else:
-                continue
-        return "User ID not found"
-
     def add_new_user(self, new_user):
         """Takes 2 arguments all_users representing all users in the storage file, and new_user with the
         new user ID, user name and an empty dictionary of movies.
         Adds the new user to all_users and saves it in the JSON file."""
-        users = {}
         with open(self.filename, "r") as handle:
             data = json.load(handle)
             users = data
@@ -88,7 +87,6 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
         handle.close()
         return "Rating has been updated"
 
-
     def delete_movie(self, user_id, movie_title):
         with open(self.filename, "r") as handle:
             data = json.load(handle)
@@ -100,4 +98,3 @@ class JSONDataManager(DataManagerInterface.DataManagerInterface):
             handle.write(json_str)
         handle.close()
         return "Movie has been deleted"
-

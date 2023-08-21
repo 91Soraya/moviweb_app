@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #FAF3DD;
+    color: #5E6472;
+}
+
+ul {
+    list-style-type: disclosure-closed;
+    color: #FFA69E;
+}
+
+li {
+    margin: 10px;
+}
+
+.movie {
+    list-style-type: none;
+    border-bottom: solid #5E6472;
+    padding: 0.5em;
+    border-radius: 20px;
+    padding-left: 20px;
+    color: #6BBBC7;
+}
+
+.movie h2 {
+    color: #5E6472;
+}
+
+a {
+    text-decoration: none;
+    color: #FFA69E;
+}
+
+a:hover {
+    color: #AED9E0;
+}
+
+form {
+    padding: 10px;
+}
+
+input, label {
+    margin: 10px;
+}
+
+input {
+    padding: 0.5em;
+    background: #B8F2E6;
+}
+
+input:hover {
+    background: #AED9E0;
+}

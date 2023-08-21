@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
 <form method="POST" action="/add_user">
-    <label for="name">Name:</label><br>
+    <label for="name">Please enter your name:</label><br>
     <input type="text" id="name" name="name" onkeydown="return /[a-zA-Z0-9]/i.test(event.key)"><br>
     <input type="submit" value="Submit">
 </form>

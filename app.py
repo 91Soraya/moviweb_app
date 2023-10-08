@@ -2,20 +2,30 @@ from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import UndefinedError
 import requests
 import json
+from data_models import db, User, Movie
 
 from datamanager.JSONDataManager import JSONDataManager
+from datamanager.sqlite_datamanager import sqlite_datamanager
 
 app = Flask(__name__)
-data_manager = JSONDataManager('datamanager/users.json')  # Use the appropriate path to your JSON file
+#data_manager = JSONDataManager('datamanager/users.json')  # Use the appropriate path to your JSON file
+data_manager = sqlite_datamanager('data/library.sqlite')
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.root_path}\data\library.sqlite"
+db.init_app(app)
 
+#with app.app_context():
+#    db.create_all()
 
 def create_new_user_id():
     user_ids = []
     users = data_manager.get_all_users()
     for user_id in users:
         user_ids.append(user_id)
-    max_id = int(max(user_ids)) + 1
-    return max_id
+    if len(user_ids) < 1:
+        return 1
+    else:
+        max_id = int(max(user_ids)) + 1
+        return max_id
 
 
 def create_new_user(name, user_id):
@@ -51,7 +61,7 @@ def list_users():
 @app.route("/users/<user_id>")  # exhibit a specific user’s list of favorite movies.
 def list_favorite_movies(user_id):
     users = data_manager.get_all_users()
-    user_name = data_manager.find_user_by_id(users, int(user_id))
+    user_name = data_manager.find_user_by_id(user_id)
     user_movies = data_manager.get_user_movies(user_id)
     try:
         return render_template('user_movies.html', users=users, user_name=user_name, user_movies=user_movies,
@@ -70,11 +80,10 @@ def add_new_user():
             return render_template("error.html", error_message=error_message)
         existing_users = data_manager.get_all_users()
         for user in existing_users:
-            if name.lower() == existing_users[user].lower():
+            if name.lower() == user.user_name.lower():
                 error_message = "User already exists."
                 return render_template("error.html", error_message=error_message)
-        user_id = create_new_user_id()
-        new_user = create_new_user(name, user_id)
+        new_user = User(user_name=name)
         data_manager.add_new_user(new_user)
         return redirect(url_for("list_users"))
     return render_template("add_user.html")
@@ -112,14 +121,9 @@ def add_movie(user_id):
             director = parse_json["Director"]
             year = int(parse_json["Year"])
             rating = float(parse_json["imdbRating"])
-            movie_id = create_new_movie_id()
-            new_movie = {movie_title: {
-                "director": director,
-                "year": year,
-                "rating": rating,
-                "movie_id": movie_id
-            }}
-            data_manager.add_movie(user_id, new_movie)
+            print(user_id)
+            new_movie = Movie(user_id=int(user_id), title=movie_title, year=year, director=director, rating=rating)
+            data_manager.add_movie(new_movie)
             return redirect(url_for("list_users"))
 
     return render_template("add_movie.html", user_id=user_id)

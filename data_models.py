@@ -7,32 +7,26 @@ class User(db.Model):
     __tablename__ = "users"
     user_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     user_name = db.Column(db.String(30), unique=True)
-    birth_date = db.Column(db.String, nullable=False)
 
-
-class Director(db.Model):
-    __tablename__ = "directors"
-    director_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    director_name = db.Column(db.String(50))
-    birth_date = db.Column(db.String, nullable=False)
-    date_of_death = db.Column(db.String)
+    def __init__(self, user_name):
+        self.user_name = user_name
 
 
 class Movie(db.Model):
     __tablename__ = "movies"
     movie_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     title = db.Column(db.String(50))
     year = db.Column(db.Integer)
-    director_id = db.Column(db.Integer, db.ForeignKey("directors.director_id"))
-    imbd_rating = db.Column(db.Float)
-
-
-class UserMovie(db.Model):
-    __tablename__ = "User_movie_records"
-    user_movie_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    director = db.Column(db.String)
     rating = db.Column(db.Float)
-    title = db.Column(db.String(50), unique=True)
+
+    def __init__(self, title, year, rating, user_id, director):
+        self.title = title
+        self.year = year
+        self.director = director
+        self.rating = rating
+        self.user_id = user_id
 
 
 """

@@ -10,12 +10,12 @@
 <h1>Favorite movies of {{ user_name }}</h1>
 <a href="/users/{{ user_id }}/add_movie">Add new movie</a>
 <ul>
-    {% for movie, details in user_movies.items() %}
+    {% for movie in movies %}
     <li class="movie">
         <h2>{{ movie }}</h2>
-        <p>Year: {{ user_movies[movie]["year"] }}</p>
-        <p>Director: {{ user_movies[movie]["director"] }}</p>
-        <p>Rating: {{ user_movies[movie]["rating"] }}</p>
+        <p>Year: {{ movie.year }}</p>
+        <p>Director: {{ movie.director }}</p>
+        <p>Rating: {{ movie.rating }}</p>
         <a href="/users/{{ user_id }}/update_movie/{{ user_movies[movie]['movie_id'] }}"><button>Update rating</button></a>
         <a href="/users/{{ user_id }}/delete_movie/{{ user_movies[movie]['movie_id'] }}"><button>Delete movie</button></a>
     </li>

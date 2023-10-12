@@ -18,7 +18,8 @@ class sqlite_datamanager(DataManagerInterface.DataManagerInterface):
         """ This method takes one argument: user_id. This represents the identifier of the user
         for whom we want to retrieve the favorite movies. Returns a dictionary of movies for the given user.
         Each movie is a dictionary with details about the movie."""
-        return Movie.query.filter(Movie.user_id == user_id)
+        user_movies = Movie.query.join(User).filter(int(user_id) == Movie.user_id)
+        return user_movies
 
 
     def find_user_by_id(self, user_id):

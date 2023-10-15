@@ -134,12 +134,12 @@ def add_movie(user_id):
 def update_movie(user_id, movie_id):
     user_movies = data_manager.get_user_movies(user_id)
     for movie in user_movies:
-        if int(movie_id) == int(user_movies[movie]["movie_id"]):
-            movie_title = movie
-            rating = user_movies[movie]["rating"]
+        if int(movie_id) == int(movie.movie_id):
+            movie_title = movie.title
+            rating = movie.rating
     if request.method == "POST":
         updated_rating = float(request.form.get("rating"))
-        data_manager.update_movie(user_id, movie_title, updated_rating)
+        data_manager.update_movie(user_id, movie_id, updated_rating)
         return redirect(url_for("list_favorite_movies", user_id=user_id))
     return render_template("update_movie.html", user_movies=user_movies, movie_id=movie_id, movie_title=movie_title,
                            rating=rating, user_id=user_id)
@@ -150,9 +150,9 @@ def update_movie(user_id, movie_id):
 def delete_movie(user_id, movie_id):
     user_movies = data_manager.get_user_movies(user_id)
     for movie in user_movies:
-        if int(movie_id) == int(user_movies[movie]["movie_id"]):
-            movie_title = movie
-            data_manager.delete_movie(user_id, movie_title)
+        if int(movie_id) == int(movie.movie_id):
+            print("Matching movie_id")
+            data_manager.delete_movie(movie)
 
     return redirect(url_for("list_favorite_movies", user_id=user_id))
 

@@ -55,11 +55,18 @@ class sqlite_datamanager(DataManagerInterface.DataManagerInterface):
 
 
 
-    def update_movie(self, user_id, movie_title, updated_rating):
+    def update_movie(self, user_id, movie_id, updated_rating):
         """Takes 2 arguments, updated_movie in a dictionary format, and updates the movie for the user with user_id"""
-        pass
+        user_movies = self.get_user_movies(user_id)
+        movie = Movie.query.filter_by(movie_id=movie_id).first()
+        movie.rating = updated_rating
+        db.session.commit()
+        return "Updated correctly"
 
 
-    def delete_movie(self, user_id, movie_title):
-        """Takes 2 arguments, user_id and movie_title and deletes the movie"""
-        pass
+
+    def delete_movie(self, movie):
+        """Deletes the movie from the database"""
+        db.session.delete(movie)
+        db.session.commit()
+        return "Movie was deleted"

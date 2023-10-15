@@ -16,8 +16,8 @@
         <p>Year: {{ movie.year }}</p>
         <p>Director: {{ movie.director }}</p>
         <p>Rating: {{ movie.rating }}</p>
-        <a href="/users/{{ user_id }}/update_movie/{{ user_movies.movie_id }}"><button>Update rating</button></a>
-        <a href="/users/{{ user_id }}/delete_movie/{{ user_movies.movie_id }}"><button>Delete movie</button></a>
+        <a href="/users/{{ user_id }}/update_movie/{{ movie.movie_id }}"><button>Update rating</button></a>
+        <a href="/users/{{ user_id }}/delete_movie/{{ movie.movie_id }}"><button>Delete movie</button></a>
     </li>
     {% endfor %}
 </ul>

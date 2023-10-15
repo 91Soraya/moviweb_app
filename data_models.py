@@ -29,6 +29,20 @@ class Movie(db.Model):
         self.user_id = user_id
 
 
+class Review(db.Model):
+    __tablename__ = "reviews"
+    review_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.movie_id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    rating = db.Column(db.Float)
+    review = db.Column(db.String(300))
+
+    def __init__(self, movie_id, user_id, rating, review):
+        self.movie_id = movie_id
+        self.user_id = user_id
+        self.rating = rating
+        self.review = review
+
 """
 Now, if you want to retrieve all movies from the database, with SQLAlchemy ORM, it would look something like this:
 

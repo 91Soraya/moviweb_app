@@ -1,5 +1,5 @@
 from datamanager import DataManagerInterface
-from data_models import db, User, Movie
+from data_models import db, User, Movie, Review
 
 class sqlite_datamanager(DataManagerInterface.DataManagerInterface):
 
@@ -70,3 +70,19 @@ class sqlite_datamanager(DataManagerInterface.DataManagerInterface):
         db.session.delete(movie)
         db.session.commit()
         return "Movie was deleted"
+
+
+    def add_new_review(self, new_review):
+        """Adds a review"""
+        db.session.add(new_review)
+        db.session.commit()
+        return "Review was added"
+
+
+    def get_all_reviews(self):
+        """This method takes no arguments. This returns all reviews."""
+        return Review.query.all()
+
+    def get_all_movies(self):
+        """This method takes no arguments. This returns all movies."""
+        return Review.query.all()

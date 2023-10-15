@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+  </head>
+  <body>
+
+  <h1>Ready to leave a review, {{ user_name }}?</h1>
+
+  <form method="POST" action="{{ url_for('add_review', user_name=user_name, user_id=user_id) }}">
+    <label for="movie">Choose a movie</label><br>
+    <SELECT name="movie" id="movie">
+    {% for movie in user_movies %}
+    <OPTION value={{movie.movie_id}}>{{movie.title}}</option>
+    {% endfor %}
+    </SELECT><br><br>
+
+    <label for="review">Please write your review:</label><br>
+    <textarea name="review" id="review" rows="5" cols="50">Write your review here..</textarea>
+
+    <input type="submit" value="Submit">
+</form>
+
+
+  </body>
+</html>

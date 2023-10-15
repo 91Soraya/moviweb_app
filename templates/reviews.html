@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite movies</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+<h1>All reviews from all users</h1>
+<ul>
+    {% for review in reviews %}
+    <li class="movie">
+        <h2>{{ review.title }}</h2>
+        <p>User_id: {{ review.user_id }}</p>
+        <p>Rating: {{ review.rating }}</p>
+        <p>Review: {{ review.review }}</p>
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

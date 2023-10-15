@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import UndefinedError
 import requests
 import json
-from data_models import db, User, Movie
+from data_models import db, User, Movie, Review
 
-from datamanager.JSONDataManager import JSONDataManager
+#from datamanager.JSONDataManager import JSONDataManager
 from datamanager.sqlite_datamanager import sqlite_datamanager
 
 app = Flask(__name__)
@@ -155,6 +155,28 @@ def delete_movie(user_id, movie_id):
             data_manager.delete_movie(movie)
 
     return redirect(url_for("list_favorite_movies", user_id=user_id))
+
+
+@app.route('/users/<user_id>/write_review', methods=["GET", "POST"])
+#Upon visiting this route, a review can be written by a user for a specific movie
+def add_review(user_id):
+    user_name = data_manager.find_user_by_id(user_id)
+    user_movies = data_manager.get_user_movies(user_id)
+    if request.method == "POST":
+        movie_id_to_review = int(request.form.get("movie"))
+        movie_to_review = Movie.query.filter_by(movie_id=movie_id_to_review).first()
+        review_text = request.form.get("review")
+        rating = movie_to_review.rating
+        new_review = Review(movie_id=movie_id_to_review, user_id=user_id, rating=rating, review=review_text)
+        data_manager.add_new_review(new_review)
+
+    return render_template("add_review.html", user_name=user_name, user_movies=user_movies, user_id=user_id)
+
+
+@app.route("/reviews", methods=["GET"])
+def user_reviews():
+    reviews = data_manager.get_all_reviews()
+    return render_template("reviews.html", reviews=reviews)
 
 
 @app.errorhandler(404)

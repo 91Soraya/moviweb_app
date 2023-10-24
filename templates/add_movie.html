@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Add a new movie</h1>
+<a href="/">Go to home page</a>
 <form method="POST" action="{{ url_for('add_movie', user_id=user_id) }}">
     <label for="movie_title">Movie title: </label><br>
     <input type="text" id="movie_title" name="movie_title"><br>

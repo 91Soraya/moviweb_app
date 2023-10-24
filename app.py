@@ -121,7 +121,6 @@ def add_movie(user_id):
             director = parse_json["Director"]
             year = int(parse_json["Year"])
             rating = float(parse_json["imdbRating"])
-            print(user_id)
             new_movie = Movie(user_id=int(user_id), title=movie_title, year=year, director=director, rating=rating)
             data_manager.add_movie(new_movie)
             return redirect(url_for("list_users"))
@@ -151,7 +150,6 @@ def delete_movie(user_id, movie_id):
     user_movies = data_manager.get_user_movies(user_id)
     for movie in user_movies:
         if int(movie_id) == int(movie.movie_id):
-            print("Matching movie_id")
             data_manager.delete_movie(movie)
 
     return redirect(url_for("list_favorite_movies", user_id=user_id))
@@ -169,6 +167,7 @@ def add_review(user_id):
         rating = movie_to_review.rating
         new_review = Review(movie_id=movie_id_to_review, user_id=user_id, rating=rating, review=review_text)
         data_manager.add_new_review(new_review)
+        return redirect(url_for("user_reviews"))
 
     return render_template("add_review.html", user_name=user_name, user_movies=user_movies, user_id=user_id)
 
@@ -176,7 +175,9 @@ def add_review(user_id):
 @app.route("/reviews", methods=["GET"])
 def user_reviews():
     reviews = data_manager.get_all_reviews()
-    return render_template("reviews.html", reviews=reviews)
+    users = data_manager.get_all_users()
+    movies = data_manager.get_all_movies()
+    return render_template("reviews.html", reviews=reviews, users=users, movies=movies)
 
 
 @app.errorhandler(404)

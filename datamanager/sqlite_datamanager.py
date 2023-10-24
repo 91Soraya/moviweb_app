@@ -1,3 +1,5 @@
+from select import select
+
 from datamanager import DataManagerInterface
 from data_models import db, User, Movie, Review
 
@@ -81,8 +83,11 @@ class sqlite_datamanager(DataManagerInterface.DataManagerInterface):
 
     def get_all_reviews(self):
         """This method takes no arguments. This returns all reviews."""
-        return Review.query.all()
+
+        reviews = Review.query.outerjoin(User).outerjoin(Movie)
+        db.session.commit()
+        return reviews
 
     def get_all_movies(self):
         """This method takes no arguments. This returns all movies."""
-        return Review.query.all()
+        return Movie.query.all()

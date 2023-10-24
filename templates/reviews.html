@@ -8,11 +8,20 @@
 </head>
 <body>
 <h1>All reviews from all users</h1>
+<a href="/">Go to home page</a>
 <ul>
     {% for review in reviews %}
     <li class="movie">
-        <h2>{{ review.title }}</h2>
-        <p>User_id: {{ review.user_id }}</p>
+        {% for movie in movies %}
+            {% if movie.movie_id == review.movie_id %}
+        <h2>{{ movie.title }}</h2>
+            {% endif %}
+        {% endfor %}
+        {% for user in users %}
+            {% if user.user_id == review.user_id %}
+        <p>Written by: {{ user.user_name }}</p>
+            {% endif %}
+        {% endfor %}
         <p>Rating: {{ review.rating }}</p>
         <p>Review: {{ review.review }}</p>
     </li>

@@ -7,7 +7,10 @@ from data_models import db, User, Movie, Review
 #from datamanager.JSONDataManager import JSONDataManager
 from datamanager.sqlite_datamanager import sqlite_datamanager
 
+from api import api  # Importing the API blueprint
+
 app = Flask(__name__)
+app.register_blueprint(api, url_prefix='/api')  # Registering the blueprint
 #data_manager = JSONDataManager('datamanager/users.json')  # Use the appropriate path to your JSON file
 data_manager = sqlite_datamanager('data/library.sqlite')
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.root_path}\data\library.sqlite"
